@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "HomeIndexPartialView";
+}
+
+
+@{
+    foreach (List <string> linkList in Model) {
+        <h4> @linkList[0]</h4>
+        for (var i = 1; i < linkList.Count; i++) {
+            @linkList[i]
+            <br/>
+        }
+    }
+}
