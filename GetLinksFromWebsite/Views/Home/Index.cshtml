@@ -1,5 +1,4 @@
-﻿@using System.Web.UI.WebControls
-@model GetLinksFromWebsite.Models.IndexViewModel
+﻿@model GetLinksFromWebsite.Models.IndexViewModel
 
 @{
     ViewBag.Title = "title";
@@ -52,7 +51,7 @@
 
 @using (Ajax.BeginForm("Index", "Home", new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "div1", InsertionMode = InsertionMode.Replace})) {
     @Html.TextBoxFor(model => model.WebsteiUrl)
-    @Html.TextBoxFor(Model => Model.DepthWebsiteUrls, new Style {Width = 10})
+    @Html.TextBoxFor(model => Model.DepthWebsiteUrls, new {style = "width:20px;", placeholder = "5" })
     <input type="submit" value="Submit" class="btn btn-default btnMain"/>
 }
 
