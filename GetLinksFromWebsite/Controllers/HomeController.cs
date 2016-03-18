@@ -66,22 +66,22 @@ namespace GetLinksFromWebsite.Controllers {
         }
 
         public List <List <string>> GetLinks(string url, string depth) {
-            var htmlWeb = new HtmlWeb();
-            var htmlDocument = htmlWeb.Load(url);
-            var linksList = new List <List <string>>();
+            HtmlWeb htmlWeb = new HtmlWeb();
+            HtmlDocument htmlDocument = htmlWeb.Load(url);
+            List <List <string>> linksList = new List <List <string>>();
 
             if (depth != null) {
                 int num;
                 if (int.TryParse(depth, out num)) {
-                    var intDepth = int.Parse(depth);
-                    foreach (var masterLink in htmlDocument.DocumentNode.SelectNodes("//a[@href]")) {
-                        var linkList = new List <string>();
-                        var hrefValueMasterLink = masterLink.GetAttributeValue("href", string.Empty);
-                        var innerHtmlDocument = htmlWeb.Load(url + hrefValueMasterLink);
+                    int intDepth = int.Parse(depth);
+                    foreach (HtmlNode masterLink in htmlDocument.DocumentNode.SelectNodes("//a[@href]")) {
+                        List <string> linkList = new List <string>();
+                        string hrefValueMasterLink = masterLink.GetAttributeValue("href", string.Empty);
+                        HtmlDocument innerHtmlDocument = htmlWeb.Load(url + hrefValueMasterLink);
                         linkList.Add(url + hrefValueMasterLink);
-                        for (var i = 0; i < intDepth; i++) {
-                            var innerLink = innerHtmlDocument.DocumentNode.SelectNodes("//a[@href]")[i];
-                            var hrefValueInner = innerLink.GetAttributeValue("href", string.Empty);
+                        for (int i = 0; i < intDepth; i++) {
+                            HtmlNode innerLink = innerHtmlDocument.DocumentNode.SelectNodes("//a[@href]")[i];
+                            string hrefValueInner = innerLink.GetAttributeValue("href", string.Empty);
                             linkList.Add(url + hrefValueInner);
                         }
                         linksList.Add(linkList);
@@ -90,75 +90,19 @@ namespace GetLinksFromWebsite.Controllers {
                 }
             }
 
-            foreach (var masterLink in htmlDocument.DocumentNode.SelectNodes("//a[@href]")) {
-                var linkList = new List <string>();
-                var hrefValueMasterLink = masterLink.GetAttributeValue("href", string.Empty);
-                var innerHtmlDocument = htmlWeb.Load(url + hrefValueMasterLink);
+            foreach (HtmlNode masterLink in htmlDocument.DocumentNode.SelectNodes("//a[@href]")) {
+                List <string> linkList = new List <string>();
+                string hrefValueMasterLink = masterLink.GetAttributeValue("href", string.Empty);
+                HtmlDocument innerHtmlDocument = htmlWeb.Load(url + hrefValueMasterLink);
                 linkList.Add(url + hrefValueMasterLink);
-                for (var i = 0; i < 5; i++) {
-                    var innerLink = innerHtmlDocument.DocumentNode.SelectNodes("//a[@href]")[i];
-                    var hrefValueInner = innerLink.GetAttributeValue("href", string.Empty);
+                for (int i = 0; i < 5; i++) {
+                    HtmlNode innerLink = innerHtmlDocument.DocumentNode.SelectNodes("//a[@href]")[i];
+                    string hrefValueInner = innerLink.GetAttributeValue("href", string.Empty);
                     linkList.Add(url + hrefValueInner);
                 }
                 linksList.Add(linkList);
             }
             return linksList;
-        }
-
-        public class WebClientExtended: WebClient {
-            #region Konstruktoren
-
-            public WebClientExtended() {
-                CookieContainer = new CookieContainer();
-            }
-
-            #endregion
-
-            #region Eigenschaften
-
-            public CookieContainer CookieContainer{get; set;} = new CookieContainer();
-
-            #endregion
-
-            #region Felder
-
-            #endregion
-
-            #region Methoden
-
-            protected override WebRequest GetWebRequest(Uri address) {
-                var r = base.GetWebRequest(address);
-                var request = r as HttpWebRequest;
-                request.AllowAutoRedirect = false;
-                request.ServicePoint.Expect100Continue = false;
-                if (request != null) {
-                    request.CookieContainer = CookieContainer;
-                }
-
-                ((HttpWebRequest) r).Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-                ((HttpWebRequest) r).UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"; //IE
-
-                r.Headers.Set("Accept-Encoding", "gzip, deflate, sdch");
-                r.Headers.Set("Accept-Language", "de-AT,de;q=0.8,en;q=0.6,en-US;q=0.4,fr;q=0.2");
-                r.Headers.Add(HttpRequestHeader.KeepAlive, "1");
-
-                ((HttpWebRequest) r).AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-                return r;
-            }
-
-            protected override WebResponse GetWebResponse(WebRequest request) {
-                var response = base.GetWebResponse(request);
-
-                if (!string.IsNullOrEmpty(response.Headers["Location"])) {
-                    request = GetWebRequest(new Uri(response.Headers["Location"]));
-                    request.ContentLength = 0;
-                    response = GetWebResponse(request);
-                }
-
-                return response;
-            }
-
-            #endregion
         }
     }
 }
