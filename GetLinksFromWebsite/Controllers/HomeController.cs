@@ -9,7 +9,9 @@ namespace GetLinksFromWebsite.Controllers {
     public class HomeController: Controller {
         // GET: Home
         public ActionResult Index() {
-            return View();
+            IndexViewModel model = new IndexViewModel();
+            model.WebsteiUrl = "https://angular.io/docs/ts/latest/tutorial/";
+            return View(model);
         }
 
         // Post: Home
@@ -60,7 +62,7 @@ namespace GetLinksFromWebsite.Controllers {
             //////return Json(linksString, JsonRequestBehavior.AllowGet);
 
             ////return View();
-            /// 
+
             List <List <string>> linksList = GetLinks(model.WebsteiUrl, model.DepthWebsiteUrls);
             return PartialView("HomeIndexPartialView", linksList);
         }
