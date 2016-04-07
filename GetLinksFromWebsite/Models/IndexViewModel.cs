@@ -9,7 +9,7 @@ namespace GetLinksFromWebsite.Models
     public class IndexViewModel
     {
         [Display(Name = "Website URL")]
-        public string WebsteiUrl{get; set;}
+        public string WebsiteUrl{get; set;}
 
         [Display(Name = "Depth lvl for each link")]
         public string DepthWebsiteUrls { get; set;}

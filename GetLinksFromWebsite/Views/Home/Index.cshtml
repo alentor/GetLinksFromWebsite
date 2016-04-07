@@ -4,79 +4,18 @@
     ViewBag.Title = "Get All Links From Web";
 }
 
-@*<head>
-    <script type="text/javascript" src="@Url.Content("/Scripts/jquery-2.2.1.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            //alert("Page loaded");
-        });
-
-        function GetLinksWebSiteUrl(webSitePageUrl) {
-            alert(webSitePageUrl);
-            document.getElementById("myframe").document.getElementsByTagName('a');
-        }
-
-        function GetLinksOnPage() {
-            var links = document.getElementsByTagName('a');
-            for (var i = 0; i < links.length; i++) {
-                alert(links[i].href);
-            }
-        }
-
-        //2 options to Change the url of the iframe
-        document.getElementById("myframe").src = "http://www.cnn.com";
-
-        function loadIframe(iframeName, url) {
-            alert(url);
-            var $iframe = $('#' + iframeName);
-            if ($iframe.length) {
-                $iframe.attr('src', url);
-                return false;
-            }
-            return true;
-        }
-
-    </script>
-</head>*@
-
+<script>
+    function loading() {
+        document.getElementById("resultRequest").innerHTML = '<img src="/content/images/ajax-loader.gif">';
+    }
+</script>
 <br/>
-@*@using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
-{
-    @Html.TextBoxFor(model => model.WebsteiUrl)
-    <input type="submit" value="Submit" class="btn btn-default btnMain" />
-
-}*@
-
-@using (Ajax.BeginForm("Index", "Home", new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "div1", InsertionMode = InsertionMode.Replace})) {
-    @Html.LabelFor(model => model.WebsteiUrl);
+@using (Ajax.BeginForm("Index", "Home", new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "resultRequest", InsertionMode = InsertionMode.Replace})) {
+    @Html.LabelFor(model => model.WebsiteUrl);
     <br/>
-    @Html.TextBoxFor(model => model.WebsteiUrl, new {value = "https://angular.io/docs/ts/latest/tutorial/" , width ="200"})
-    <br />
-    <br />
-    @Html.LabelFor(model => model.DepthWebsiteUrls);
-    <br />
-    @Html.TextBoxFor(model => Model.DepthWebsiteUrls, new {style = "width:20px;", placeholder = "5" })
-    <input type="submit" value="Submit" class="btn btn-default btnMain"/>
+    @Html.TextBoxFor(model => model.WebsiteUrl, new { style = "width:350px;" })
+    @Html.TextBoxFor(model => Model.DepthWebsiteUrls, new {style = "width:20px;" })
+    <input type="submit" value="Submit" class="btn btn-default btnMain" onclick="loading()"/>
 }
 
-<div id="div1"></div>
-
-@*@Ajax.ActionLink("press here", "Index", new {fname = "yossi"}, new AjaxOptions {HttpMethod = "Get", UpdateTargetId = "div1", InsertionMode = InsertionMode.Replace})*@
-
-
-@*<br/>
-<br/>
-<br/>
-<iframe src="http://www.w3schools.com" width="100%" height="300" id="myframe"></iframe>
-<br/>
-<input type=button onclick="return loadIframe('myframe', 'http://www.ynet.co.il');" value="Change website"/>
-<br/>
-<h2>Example links on the parent page</h2>
-<a href="http://www.w3schools.com/html/">Visit our HTML tutorial</a><br/>
-<a href="http://www.google.com/">Google</a>
-<br/>
-<a href="http://www.ynet.co.il/">Ynet</a>
-<br/>
-<input type=button onclick="GetLinksOnPage()" value="Get all links on this page"/>*@
+<div id="resultRequest"></div>
